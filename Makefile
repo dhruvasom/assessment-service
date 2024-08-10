@@ -30,3 +30,7 @@ clean:
 .PHONY: cbr
 cbr:
 	./gradlew clean build && docker build -t $(IMAGE_NAME):$(TAG) . && docker-compose up -d
+
+.PHONY: qr
+qr:
+	docker-compose down && ./gradlew clean build -x test && docker build -t $(IMAGE_NAME):$(TAG) . && docker-compose up -d

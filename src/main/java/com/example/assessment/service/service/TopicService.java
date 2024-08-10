@@ -8,7 +8,6 @@ import com.example.assessment.service.mapper.TopicMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,8 +29,14 @@ public class TopicService {
         return topicRepository.findAll().stream().map(topicMapper::fromTopic).toList();
     }
 
-    public Optional<TopicDTO> findById(String topicId) {
-        return topicRepository.findById(topicId).map(topicMapper::fromTopic).or(Optional::empty);
+    public TopicDTO findById(String topicId) {
+        return topicRepository.findById(topicId).map(topicMapper::fromTopic)
+                .orElseThrow(()->new ResourceNotFoundException("Topic with id :"+ topicId + " not found"));
+    }
+
+    protected Topic findTopicById(String topicId) {
+        return topicRepository.findById(topicId)
+                .orElseThrow(()->new ResourceNotFoundException("Topic with id :"+ topicId + " not found"));
     }
 
     public TopicDTO updateTopic(TopicDTO topicDTO) {
@@ -42,11 +47,11 @@ public class TopicService {
       return topicMapper.fromTopic(topicRepository.save(topicToUpdate));
     }
 
-    public Object deleteById(String topicId) {
+    public String deleteById(String topicId) {
         if (!topicRepository.existsById(topicId)) {
           throw new ResourceNotFoundException("Topic with id :"+ topicId + " not found");
         }
         topicRepository.deleteById(topicId);
-        return true;
+        return topicId;
     }
 }

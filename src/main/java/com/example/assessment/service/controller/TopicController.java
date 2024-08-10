@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class TopicController {
@@ -28,7 +27,7 @@ public class TopicController {
     }
 
     @GetMapping("/topics/{topicId}")
-    public ResponseEntity<Optional<TopicDTO>> findTopic(@PathVariable String topicId){
+    public ResponseEntity<TopicDTO> findTopic(@PathVariable String topicId){
         return new ResponseEntity<>(topicService.findById(topicId), HttpStatus.OK);
     }
 
@@ -39,7 +38,6 @@ public class TopicController {
 
     @DeleteMapping("/topic/{topicId}")
     public ResponseEntity<String> deleteTopic(@PathVariable String topicId){
-        topicService.deleteById(topicId);
-        return new ResponseEntity<>("Success",HttpStatus.OK);
+        return new ResponseEntity<>("Successfully delete topic :"+topicService.deleteById(topicId),HttpStatus.OK);
     }
 }
